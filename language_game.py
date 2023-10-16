@@ -20,11 +20,14 @@ dt = 0 #delta time
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2) #middle
 
 #Displaying something
-def display_something(text:str, position_X:int, position_Y:int, is_instruction=False):
+def display_something(text:str, position_X:int, position_Y:int, is_instruction=False, is_hebrew = False):
     text_colour = (100, 150, 200)
     if is_instruction:
         text_colour = (50, 10, 0)
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    if is_hebrew:
+        font = pygame.font.SysFont('Cyberbit', 32)
+    else:
+        font = pygame.font.Font('freesansbold.ttf', 32)
     text = font.render(text, True, text_colour, None)
     textRect = text.get_rect()
     textRect.center = (position_X, position_Y)
@@ -33,10 +36,11 @@ def display_something(text:str, position_X:int, position_Y:int, is_instruction=F
 #getting some sprites in the game
 
 class SpriteObject(pygame.sprite.Sprite):
-    def __init__(self, x, y,text, correction, is_correct=False):
+    def __init__(self, x, y,text, correction, is_correct = False):
         super().__init__()
 
         text_colour = (0, 150, 200)
+
         font = pygame.font.Font('freesansbold.ttf', 32)
 
         self.original_image = font.render(text, True, text_colour, None)
@@ -70,7 +74,7 @@ class SpriteObject(pygame.sprite.Sprite):
 instructions=display_something('Which alphabet is this?',X//2,50, is_instruction=True)
 next_question=display_something('To access the next question, just press "n" on your keyboard', X // 2, Y - 50)
 
-alphabet=display_something('А Б В Г Ґ Д Е Є Ж З И І Ї Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ь Ю Я ', X // 2, 100)
+alphabet=display_something('абвгдеёжзийклмнопрстуфхцчшщъыьэюя ', X // 2, 100)
 
 #sprite_object = SpriteObject(*screen.get_rect().center, (128, 128, 0))
 group = pygame.sprite.Group([
@@ -80,7 +84,7 @@ group = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2 + 200, "Latin","Incorrect, bouh")
 ])
 
-alphabet_1=display_something('Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ ϴ Σ Τ Υ Φ Χ Ψ Ω ∇ ', X // 2, 100)
+alphabet_1=display_something('αβγδεζηθικλμνξοπρςστυφχψ ', X // 2, 100)
 
 group_1 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2, "Arabic","Incorrect"),
@@ -89,7 +93,9 @@ group_1 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2 + 200, "Greek","Correct", is_correct=True)
 ])
 
-alphabet_2=display_something('A B C D E F G H I J K L ', X // 2, 100)
+#abcdefghijklmnopqrstuvwxyz
+hebrew_alphabet = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת'
+alphabet_2=display_something(hebrew_alphabet, X // 2, 100, is_hebrew = True)
 
 group_2 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2, "Kannada","Incorrect"),

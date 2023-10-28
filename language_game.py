@@ -19,15 +19,23 @@ dt = 0 #delta time
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2) #middle
 
+#loading images
+
+cyrillic = pygame.image.load("cyrillic.png").convert()
+greek = pygame.image.load("greek.png").convert()
+hebrew = pygame.image.load("hebrew.png").convert()
+burmese = pygame.image.load("burmese.png").convert()
+chinese = pygame.image.load("chinese.png").convert()
+japanese = pygame.image.load("japanese.png").convert()
+
 #Displaying something
-def display_something(text:str, position_X:int, position_Y:int, is_instruction=False, is_hebrew = False):
+
+def display_something(text:str, position_X:int, position_Y:int, is_instruction=False):
     text_colour = (100, 150, 200)
     if is_instruction:
         text_colour = (50, 10, 0)
-    if is_hebrew:
-        font = pygame.font.SysFont('Cyberbit', 32)
-    else:
-        font = pygame.font.Font('freesansbold.ttf', 32)
+
+    font = pygame.font.Font('freesansbold.ttf', 32)
     text = font.render(text, True, text_colour, None)
     textRect = text.get_rect()
     textRect.center = (position_X, position_Y)
@@ -71,10 +79,9 @@ class SpriteObject(pygame.sprite.Sprite):
         self.image = self.click_image if self.clicked else (self.hover_image if self.hover else self.original_image)
 
 
-instructions=display_something('Which alphabet is this?',X//2,50, is_instruction=True)
+instructions=display_something('Which alphabet is this?', X//2, 50, is_instruction=True)
 next_question=display_something('To access the next question, just press "n" on your keyboard', X // 2, Y - 50)
-
-alphabet=display_something('абвгдеёжзийклмнопрстуфхцчшщъыьэюя ', X // 2, 100)
+final_message = display_something('Congratulations, you have completed the game!', X//2, Y//2)
 
 #sprite_object = SpriteObject(*screen.get_rect().center, (128, 128, 0))
 group = pygame.sprite.Group([
@@ -84,8 +91,6 @@ group = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2 + 200, "Latin","Incorrect, bouh")
 ])
 
-alphabet_1=display_something('αβγδεζηθικλμνξοπρςστυφχψ ', X // 2, 100)
-
 group_1 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2, "Arabic","Incorrect"),
     SpriteObject(X // 2, Y // 2 - 100, "Cyrillic","Incorrect, bouh"),
@@ -93,15 +98,32 @@ group_1 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2 + 200, "Greek","Correct", is_correct=True)
 ])
 
-#abcdefghijklmnopqrstuvwxyz
-hebrew_alphabet = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת'
-alphabet_2=display_something(hebrew_alphabet, X // 2, 100, is_hebrew = True)
-
 group_2 = pygame.sprite.Group([
     SpriteObject(X // 2, Y // 2, "Kannada","Incorrect"),
-    SpriteObject(X // 2, Y // 2 - 100, "Latin","Correct", is_correct=True),
+    SpriteObject(X // 2, Y // 2 - 100, "Hebrew","Correct", is_correct=True),
     SpriteObject(X // 2, Y // 2 + 100, "Georgian","Incorrect, bouh"),
     SpriteObject(X // 2, Y // 2 + 200, "Devanagari","Incorrect, bouh")
+])
+
+group_3 = pygame.sprite.Group([
+    SpriteObject(X // 2, Y // 2, "Hindi","Incorrect"),
+    SpriteObject(X // 2, Y // 2 - 100, "Latin","Incorrect"),
+    SpriteObject(X // 2, Y // 2 + 100, "Cherokee","Incorrect, bouh"),
+    SpriteObject(X // 2, Y // 2 + 200, "Burmese","Correct",is_correct=True)
+])
+
+group_4 = pygame.sprite.Group([
+    SpriteObject(X // 2, Y // 2, "Japanese","Correct", is_correct=True),
+    SpriteObject(X // 2, Y // 2 - 100, "Devanagari","Incorrect"),
+    SpriteObject(X // 2, Y // 2 + 100, "Armenian","Incorrect, bouh"),
+    SpriteObject(X // 2, Y // 2 + 200, "Burmese","Incorrect")
+])
+
+group_5 = pygame.sprite.Group([
+    SpriteObject(X // 2, Y // 2, "Cherokee","Incorrect"),
+    SpriteObject(X // 2, Y // 2 - 100, "Japanese","Incorrect"),
+    SpriteObject(X // 2, Y // 2 + 100, "Chinese","Correct", is_correct=True),
+    SpriteObject(X // 2, Y // 2 + 200, "Korean","Incorrect")
 ])
 
 change_question=False
@@ -124,35 +146,68 @@ while running:
                 i += 1
 
     #if change_question:
-    if i == 1:
+    if i == 0:
+        # fill the screen with a color to wipe away anything from last frame
+        screen.fill((220,240,240))
+
+        screen.blit(cyrillic, (X / 2 - cyrillic.get_width() / 2, Y / 5 - cyrillic.get_height() / 5))
+
+        group.update(event_list)
+        group.draw(screen)
+
+        #display instructions on the screen
+        screen.blit(instructions[0], instructions[1])
+        screen.blit(next_question[0], next_question[1])
+
+    elif i == 1:
         screen.fill((220, 240, 240))
+        screen.blit(greek, (X / 2 - greek.get_width() / 2, Y / 5 - greek.get_height() / 5))
         group_1.update(event_list)
         group_1.draw(screen)
         screen.blit(instructions[0], instructions[1])
-        screen.blit(alphabet_1[0],alphabet_1[1])
         screen.blit(next_question[0], next_question[1])
         pygame.display.flip()
 
     elif i == 2:
         screen.fill((220, 240, 240))
+        screen.blit(hebrew, (X / 2 - hebrew.get_width() / 2, Y / 5 - hebrew.get_height() / 5))
         group_2.update(event_list)
         group_2.draw(screen)
         screen.blit(instructions[0], instructions[1])
-        screen.blit(alphabet_2[0],alphabet_2[1])
+        screen.blit(next_question[0], next_question[1])
+        pygame.display.flip()
+
+    elif i == 3:
+        screen.fill((220, 240, 240))
+        screen.blit(burmese, (X / 2 - burmese.get_width() / 2, Y / 5 - burmese.get_height() / 5))
+        group_3.update(event_list)
+        group_3.draw(screen)
+        screen.blit(instructions[0], instructions[1])
+        screen.blit(next_question[0], next_question[1])
+        pygame.display.flip()
+
+    elif i == 4:
+        screen.fill((220, 240, 240))
+        screen.blit(japanese, (X / 2 - japanese.get_width() / 2, Y / 5 - japanese.get_height() / 5))
+        group_4.update(event_list)
+        group_4.draw(screen)
+        screen.blit(instructions[0], instructions[1])
+        screen.blit(next_question[0], next_question[1])
+        pygame.display.flip()
+
+    elif i == 5:
+        screen.fill((220, 240, 240))
+        screen.blit(chinese, (X / 2 - chinese.get_width() / 2, Y / 5 - chinese.get_height() / 5))
+        group_5.update(event_list)
+        group_5.draw(screen)
+        screen.blit(instructions[0], instructions[1])
         screen.blit(next_question[0], next_question[1])
         pygame.display.flip()
 
     else:
-        # fill the screen with a color to wipe away anything from last frame
-        screen.fill((220,240,240))
+        screen.fill((220, 240, 240))
+        screen.blit(final_message[0], final_message[1])
 
-        group.update(event_list)
-        group.draw(screen)
-
-        #display words on the screen
-        screen.blit(instructions[0], instructions[1])
-        screen.blit(alphabet[0], alphabet[1])
-        screen.blit(next_question[0], next_question[1])
 
 
     #pygame.draw.circle(screen, "blue", player_pos, 20)

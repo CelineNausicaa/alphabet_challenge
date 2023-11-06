@@ -1,4 +1,5 @@
 import pygame
+#get more fonts here: https://www.fontsquirrel.com/fonts/list/popular
 
 # pygame setup
 
@@ -21,21 +22,21 @@ player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2) #mi
 
 #loading images
 
-cyrillic = pygame.image.load("cyrillic.png").convert()
-greek = pygame.image.load("greek.png").convert()
-hebrew = pygame.image.load("hebrew.png").convert()
-burmese = pygame.image.load("burmese.png").convert()
-chinese = pygame.image.load("chinese.png").convert()
-japanese = pygame.image.load("japanese.png").convert()
+cyrillic = pygame.image.load("./images/cyrillic.png").convert()
+greek = pygame.image.load("./images/greek.png").convert()
+hebrew = pygame.image.load("./images/hebrew.png").convert()
+burmese = pygame.image.load("./images/burmese.png").convert()
+chinese = pygame.image.load("./images/chinese.png").convert()
+japanese = pygame.image.load("./images/japanese.png").convert()
 
 #Displaying something
 
 def display_something(text:str, position_X:int, position_Y:int, is_instruction=False):
     text_colour = (100, 150, 200)
     if is_instruction:
-        text_colour = (50, 10, 0)
+        text_colour = (50, 70, 50)
 
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('./font/PlayfairDisplay-Regular.otf', 40)
     text = font.render(text, True, text_colour, None)
     textRect = text.get_rect()
     textRect.center = (position_X, position_Y)
@@ -49,7 +50,7 @@ class SpriteObject(pygame.sprite.Sprite):
 
         text_colour = (0, 150, 200)
 
-        font = pygame.font.Font('freesansbold.ttf', 32)
+        font = pygame.font.Font('./font/PlayfairDisplay-Bold.otf', 32)
 
         self.original_image = font.render(text, True, text_colour, None)
         self.hover_image = font.render(text, True, (255,255,255), None)
@@ -80,7 +81,7 @@ class SpriteObject(pygame.sprite.Sprite):
 
 
 instructions=display_something('Which alphabet is this?', X//2, 50, is_instruction=True)
-next_question=display_something('To access the next question, just press "n" on your keyboard', X // 2, Y - 50)
+next_question=display_something('To access the next question, just press "n" on your keyboard', X // 2, Y - 50, is_instruction= True)
 final_message = display_something('Congratulations, you have completed the game!', X//2, Y//2)
 
 #sprite_object = SpriteObject(*screen.get_rect().center, (128, 128, 0))
@@ -145,9 +146,7 @@ while running:
                 change_question=True
                 i += 1
 
-    #if change_question:
     if i == 0:
-        # fill the screen with a color to wipe away anything from last frame
         screen.fill((220,240,240))
 
         screen.blit(cyrillic, (X / 2 - cyrillic.get_width() / 2, Y / 5 - cyrillic.get_height() / 5))
@@ -155,7 +154,6 @@ while running:
         group.update(event_list)
         group.draw(screen)
 
-        #display instructions on the screen
         screen.blit(instructions[0], instructions[1])
         screen.blit(next_question[0], next_question[1])
 
